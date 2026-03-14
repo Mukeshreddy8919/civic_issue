@@ -1,0 +1,49 @@
+<div class="reports-container">
+  <nav class="glass navbar">
+    <div class="logo">
+      <span class="praise">Analytics</span><span class="hub">Hub</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/admin">Back to Dashboard</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header>
+      <h2>Pulse <span class="gradient-text">Insights</span></h2>
+      <p>Data-driven overview of civic performance</p>
+    </header>
+
+    <div *ngIf="loading" class="loader-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div *ngIf="!loading" class="analytics-grid">
+      <!-- Summary Cards -->
+      <div class="glass summary-card">
+        <h3>Resolution rate</h3>
+        <p class="big-val">{{ resolvedRate }}%</p>
+        <span>Total {{ totalGrievances }} filed</span>
+      </div>
+
+      <!-- Charts -->
+      <div class="glass chart-card">
+        <h3>Status Distribution</h3>
+        <canvas baseChart
+          [data]="pieChartData"
+          [options]="pieChartOptions"
+          [type]="pieChartType">
+        </canvas>
+      </div>
+
+      <div class="glass chart-card full-width">
+        <h3>Grievances by Category</h3>
+        <canvas baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [type]="barChartType">
+        </canvas>
+      </div>
+    </div>
+  </main>
+</div>

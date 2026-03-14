@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CivicPulse – Submit Grievance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --secondary: #10B981;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-hover: rgba(255, 255, 255, 0.95);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --text-main: #1F2937;
+      --text-muted: #6B7280;
+      --sidebar-w: 280px;
+      --danger: #EF4444;
+    }
+    html, body { 
+      height: 100%; 
+      font-family: 'Outfit', sans-serif; 
+      color: var(--text-main);
+      background: #f8fafc;
+      overflow-x: hidden;
+    }
+
+    /* Animated Mesh Background */
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(at 40% 20%, hsla(228,100%,74%,0.4) 0px, transparent 50%),
+        radial-gradient(at 80% 0%, hsla(189,100%,56%,0.4) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(355,100%,93%,0.5) 0px, transparent 50%),
+        radial-gradient(at 80% 50%, hsla(340,100%,76%,0.4) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, hsla(22,100%,77%,0.4) 0px, transparent 50%),
+        radial-gradient(at 80% 100%, hsla(242,100%,70%,0.4) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, hsla(343,100%,76%,0.4) 0px, transparent 50%);
+      filter: blur(60px);
+      animation: breathe 15s ease-in-out infinite alternate;
+    }
+    @keyframes breathe {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+
+    /* LAYOUT */
+    .app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+    /* SIDEBAR (Glassmorphism) */
+    .sidebar {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh;
+      color: white;
+      z-index: 100;
+    }
+    .sidebar-logo { padding: 30px 24px; display: flex; align-items: center; gap: 14px; }
+    .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3); }
+    .logo-icon svg { width: 22px; height: 22px; fill: white; }
+    .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.02em; }
+    
+    .sidebar-role { margin: 0 20px 20px; padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px; }
+    .role-dot { width: 12px; height: 12px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 10px #22d3ee; flex-shrink: 0; }
+    .role-name-display { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+    .role-username { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    
+    .nav-section { padding: 10px 16px; }
+    .nav-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; text-decoration: none; color: rgba(255,255,255,0.6); font-weight: 500; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 8px; }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: white; transform: translateX(4px); }
+    .nav-item.active { background: linear-gradient(90deg, rgba(99,102,241,0.2), transparent); border-left: 4px solid #6366f1; color: white; border-radius: 4px 14px 14px 4px; }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+    
+    .sidebar-footer { margin-top: auto; padding: 24px; }
+    .logout-btn { width: 100%; padding: 14px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); border-radius: 14px; color: #fca5a5; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .logout-btn:hover { background: rgba(239,68,68,0.2); color: #fef2f2; }
+
+    /* MAIN CONTENT */
+    .main { margin-left: var(--sidebar-w); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+    
+    .header-section { margin-bottom: 40px; text-align: center; }
+    .header-section h1 { font-size: 2.5rem; font-weight: 800; color: #1e293b; letter-spacing: -0.03em; margin-bottom: 8px; }
+    .header-section p { font-size: 1.1rem; color: #64748b; }
+
+    /* FORM CARD (Glassmorphism) */
+    .form-card { 
+      background: var(--surface);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px; 
+      padding: 40px; 
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Decorative shine */
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+      transform: skewX(-20deg);
+      animation: shine 8s infinite;
+    }
+    @keyframes shine { 
+      0%, 100% { left: -100%; } 
+      20% { left: 200%; }
+    }
+
+    .form-card-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    .form-card-sub { color: var(--text-muted); margin-bottom: 30px; }
+
+    /* CATEGORY GRID */
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    .cat-pill { 
+      background: rgba(255,255,255,0.5); 
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 16px; 
+      padding: 16px 10px; 
+      text-align: center; cursor: pointer; 
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .cat-pill:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 12px 20px rgba(0,0,0,0.05); 
+      border-color: #cbd5e1;
+      background: white;
+    }
+    .cat-pill.active { 
+      border-color: var(--primary); 
+      background: linear-gradient(145deg, #ffffff, #f1f5f9);
+      box-shadow: 0 8px 16px rgba(79, 70, 229, 0.15), 0 0 0 2px rgba(79, 70, 229, 0.2); 
+      transform: translateY(-2px);
+    }
+    .cat-emoji { font-size: 2rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); transition: transform 0.3s; }
+    .cat-pill:hover .cat-emoji { transform: scale(1.1); }
+    .cat-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); transition: color 0.2s; }
+    .cat-pill.active .cat-label { color: var(--primary); font-weight: 700; }
+
+    /* FORM FIELDS */
+    .form-group { margin-bottom: 24px; }
+    label { display: block; font-size: 0.95rem; font-weight: 600; color: #334155; margin-bottom: 10px; }
+    .required { color: var(--danger); }
+    
+    input[type="text"], textarea {
+      width: 100%; padding: 14px 18px; 
+      border: 1px solid #cbd5e1; border-radius: 14px;
+      font-family: inherit; font-size: 1rem; color: #1e293b;
+      background: rgba(255,255,255,0.8); 
+      transition: all 0.25s ease; outline: none; resize: vertical;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+    input[type="text"]:focus, textarea:focus { 
+      border-color: var(--primary); 
+      background: white; 
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); 
+    }
+    input::placeholder, textarea::placeholder { color: #94a3b8; }
+    textarea { min-height: 120px; }
+
+    /* LOCATION ROW */
+    .location-row { display: flex; gap: 12px; }
+    .location-row input { flex: 1; }
+    .locate-btn { 
+      padding: 0 20px; 
+      background: #f1f5f9; 
+      border: 1px solid #cbd5e1; 
+      border-radius: 14px; color: #475569; 
+      font-family: inherit; font-weight: 600; 
+      cursor: pointer; white-space: nowrap; 
+      transition: all 0.2s; 
+      display: flex; align-items: center; gap: 8px;
+    }
+    .locate-btn:hover { background: #e2e8f0; color: #1e293b; }
+    .locate-btn.active-locating { background: #dbeafe; color: #2563eb; border-color: #bfdbfe; }
+
+    /* IMAGE UPLOAD */
+    .upload-zone {
+      border: 2px dashed #cbd5e1; border-radius: 16px; padding: 32px 24px;
+      text-align: center; cursor: pointer; transition: all 0.3s; 
+      background: rgba(248, 250, 252, 0.6);
+      position: relative; overflow: hidden;
+    }
+    .upload-zone:hover { border-color: var(--primary); background: rgba(238, 242, 255, 0.5); }
+    .upload-zone.has-image { border-color: var(--secondary); background: rgba(209, 250, 229, 0.3); border-style: solid; }
+    .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 10; }
+    .upload-icon { font-size: 2.5rem; margin-bottom: 12px; color: #94a3b8; transition: transform 0.3s, color 0.3s; }
+    .upload-zone:hover .upload-icon { transform: translateY(-4px); color: var(--primary); }
+    .upload-text { font-size: 0.95rem; color: #64748b; }
+    .upload-text strong { color: var(--primary); }
+    .preview-img { max-width: 100%; max-height: 240px; border-radius: 12px; margin-top: 16px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; z-index: 5; }
+
+    /* SUBMIT BUTTON */
+    .submit-wrapper { margin-top: 32px; display: flex; justify-content: flex-end; }
+    .btn-submit { 
+      padding: 16px 36px; 
+      background: linear-gradient(135deg, var(--primary), #8b5cf6); 
+      color: white; border: none; border-radius: 14px; 
+      font-family: inherit; font-size: 1.1rem; font-weight: 700; 
+      cursor: pointer; 
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(99, 102, 241, 0.4); }
+    .btn-submit:active { transform: translateY(1px); box-shadow: 0 5px 10px rgba(99, 102, 241, 0.3); }
+    .btn-submit:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none; }
+
+    /* ALERTS */
+    .alert { padding: 16px 20px; border-radius: 12px; font-weight: 500; margin-bottom: 24px; display: none; animation: slideDown 0.3s ease-out; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .alert.show { display: flex; align-items: center; gap: 10px; }
+    .alert.error   { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .alert.success { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+
+    /* SPINNER */
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+      .main { margin-left: 0; padding: 24px 16px; }
+      .header-section h1 { font-size: 2rem; }
+      .form-card { padding: 24px; border-radius: 20px; }
+      .location-row { flex-direction: column; }
+      .locate-btn { padding: 14px; justify-content: center; }
+      .btn-submit { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+      <span class="logo-text">CivicPulse</span>
+    </div>
+    <div class="sidebar-role">
+      <div class="role-dot"></div>
+      <div>
+        <div class="role-name-display">CITIZEN</div>
+        <div class="role-username" id="sidebarUsername">@user</div>
+      </div>
+    </div>
+    <div class="nav-section">
+      <a class="nav-item" href="dashboard.html">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>Dashboard
+      </a>
+      <a class="nav-item active" href="submit.html">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Submit Grievance
+      </a>
+      <a class="nav-item" href="mygrievances.html">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"/></svg>My Grievances
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="header-section">
+      <h1>Report an Issue</h1>
+      <p>Help us build a better city by reporting civic issues around you.</p>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title">📝 Grievance Details</div>
+      <div class="form-card-sub">Please verify all information before submission.</div>
+
+      <div id="alert" class="alert"></div>
+
+      <!-- CATEGORY -->
+      <div class="form-group">
+        <label>Select Category <span class="required">*</span></label>
+        <div class="category-grid">
+          <div class="cat-pill" data-cat="WATER" onclick="selectCat(this)">
+            <span class="cat-emoji">💧</span><span class="cat-label">Water</span>
+          </div>
+          <div class="cat-pill" data-cat="STREET_LIGHT" onclick="selectCat(this)">
+            <span class="cat-emoji">💡</span><span class="cat-label">Street Light</span>
+          </div>
+          <div class="cat-pill" data-cat="ROAD" onclick="selectCat(this)">
+            <span class="cat-emoji">🛣️</span><span class="cat-label">Road</span>
+          </div>
+          <div class="cat-pill" data-cat="SANITATION" onclick="selectCat(this)">
+            <span class="cat-emoji">🗑️</span><span class="cat-label">Sanitation</span>
+          </div>
+          <div class="cat-pill" data-cat="DRAINAGE" onclick="selectCat(this)">
+            <span class="cat-emoji">🌊</span><span class="cat-label">Drainage</span>
+          </div>
+          <div class="cat-pill" data-cat="PARK" onclick="selectCat(this)">
+            <span class="cat-emoji">🌳</span><span class="cat-label">Park</span>
+          </div>
+          <div class="cat-pill" data-cat="ELECTRICITY" onclick="selectCat(this)">
+            <span class="cat-emoji">⚡</span><span class="cat-label">Electricity</span>
+          </div>
+          <div class="cat-pill" data-cat="OTHER" onclick="selectCat(this)">
+            <span class="cat-emoji">📌</span><span class="cat-label">Other</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TITLE -->
+      <div class="form-group">
+        <label>Title <span class="required">*</span></label>
+        <input type="text" id="title" placeholder="Brief summary (e.g., Broken street light near Central Park)"/>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="form-group">
+        <label>Description <span class="required">*</span></label>
+        <textarea id="description" placeholder="Provide complete details regarding the exact issue, duration, and any hazards..."></textarea>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="form-group">
+        <label>Location <span class="required">*</span></label>
+        <div class="location-row">
+          <input type="text" id="location" placeholder="Exact street address, area or coordinates"/>
+          <button class="locate-btn" id="locBtn" onclick="getLocation(this)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Auto Detect
+          </button>
+        </div>
+      </div>
+
+      <!-- IMAGE UPLOAD -->
+      <div class="form-group">
+        <label>Attach Evidence (Photo)</label>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="imageInput" accept="image/*" onchange="handleImage(event)"/>
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">Click to upload or drag & drop image here<br><strong>PNG, JPG, WEBP</strong> (Max 5MB)</div>
+          <img id="previewImg" class="preview-img" style="display:none"/>
+        </div>
+      </div>
+
+      <div class="submit-wrapper">
+        <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+          Submit Grievance
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Auth check
+  const token = localStorage.getItem('civicpulse_token');
+  const userStr = localStorage.getItem('civicpulse_user');
+  if (!token || !userStr) window.location.href = '/index.html';
+  const user = JSON.parse(userStr);
+  document.getElementById('sidebarUsername').textContent = '@' + user.username;
+
+  let selectedCategory = null;
+  let imageBase64 = null;
+
+  function selectCat(el) {
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    selectedCategory = el.dataset.cat;
+  }
+
+  function handleImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      showAlert('Image must be under 5MB.', 'error');
+      // Reset input
+      e.target.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      imageBase64 = ev.target.result;
+      const img = document.getElementById('previewImg');
+      img.src = imageBase64;
+      img.style.display = 'block';
+      document.getElementById('uploadZone').classList.add('has-image');
+      document.querySelector('.upload-icon').style.display = 'none';
+      document.querySelector('.upload-text').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function getLocation(btn) {
+    if (!navigator.geolocation) {
+      showAlert('Geolocation not supported by your browser.', 'error');
+      return;
+    }
+    
+    btn.classList.add('active-locating');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner"></span> Detecting...';
+    
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        document.getElementById('location').value = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
+        btn.innerHTML = '✓ Detected';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('active-locating');
+        }, 3000);
+      },
+      () => {
+        showAlert('Could not detect location. Please enter manually.', 'error');
+        btn.innerHTML = originalText;
+        btn.classList.remove('active-locating');
+      }
+    );
+  }
+
+  function showAlert(msg, type) {
+    const el = document.getElementById('alert');
+    let icon = type === 'success' ? '✓' : '⚠️';
+    el.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+    el.className = `alert ${type} show`;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  function hideAlert() { 
+      document.getElementById('alert').className = 'alert'; 
+  }
+
+  async function handleSubmit() {
+    const title       = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const location    = document.getElementById('location').value.trim();
+
+    if (!selectedCategory) { showAlert('Please select a category.', 'error'); return; }
+    if (!title)             { showAlert('Please enter a title.', 'error'); return; }
+    if (!description)       { showAlert('Please enter a description.', 'error'); return; }
+    if (!location)          { showAlert('Please enter or detect a location.', 'error'); return; }
+
+    const btn = document.getElementById('submitBtn');
+    const originalBtnContent = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Submitting...';
+    hideAlert();
+
+    try {
+      const res = await fetch('/api/grievances/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ title, description, category: selectedCategory, location, imageBase64 })
+      });
+
+      const data = await res.json();
+      if (!res.ok) { showAlert(data.error || 'Submission failed.', 'error'); return; }
+
+      showAlert(`Grievance #${data.id} submitted successfully! Redirecting...`, 'success');
+      
+      // Keep button in success state
+      btn.innerHTML = '✓ Submitted';
+      
+      setTimeout(() => { window.location.href = '/mygrievances.html'; }, 2000);
+
+    } catch (err) {
+      showAlert('Server connection failed. Please try again.', 'error');
+      btn.disabled = false;
+      btn.innerHTML = originalBtnContent;
+    }
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/index.html';
+  }
+</script>
+</body>
+</html>

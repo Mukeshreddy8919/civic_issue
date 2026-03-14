@@ -1,0 +1,64 @@
+<div class="submit-container">
+  <nav class="glass navbar">
+    <div class="logo">
+      <span class="praise">Civic</span><span class="hub">Pulse</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/citizen/dashboard">Dashboard</a>
+      <a routerLink="/citizen/submit" routerLinkActive="active">Submit Grievance</a>
+      <a routerLink="/citizen/my-grievances">My Grievances</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <div class="glass form-card">
+      <header>
+        <h2>File a <span class="gradient-text">New Grievance</span></h2>
+        <p>Your report helps us build a better city.</p>
+      </header>
+
+      <form [formGroup]="submitForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Title</label>
+            <input type="text" formControlName="title" placeholder="Briefly describe the issue">
+          </div>
+
+          <div class="form-group half-width">
+            <label>Category</label>
+            <select formControlName="category">
+              <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+            </select>
+          </div>
+
+          <div class="form-group half-width">
+            <label>Location</label>
+            <input type="text" formControlName="location" placeholder="Area, Landmark or Street">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Description</label>
+            <textarea formControlName="description" rows="5" placeholder="Provide more details about the problem"></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Evidence Image (Optional)</label>
+            <div class="upload-zone" (click)="fileInput.click()">
+              <div *ngIf="!imagePreview" class="upload-placeholder">
+                <i class="icon-camera"></i>
+                <span>Click to upload image</span>
+              </div>
+              <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview">
+              <input #fileInput type="file" (change)="onFileChange($event)" hidden accept="image/*">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="submitForm.invalid || loading" class="btn-primary">
+          <span *ngIf="!loading">Submit Grievance Pulse</span>
+          <span *ngIf="loading" class="spinner"></span>
+        </button>
+      </form>
+    </div>
+  </main>
+</div>

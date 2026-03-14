@@ -1,0 +1,105 @@
+<div class="admin-container">
+  <nav class="glass navbar">
+    <div class="logo">
+      <span class="praise">Admin</span><span class="hub">Console</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/admin" routerLinkActive="active">Manage</a>
+      <a routerLink="/admin/reports">Analytics</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header>
+      <h2>Pulse <span class="gradient-text">Master Dashboard</span></h2>
+      <p>Oversee and manage city-wide grievances</p>
+    </header>
+
+    <div *ngIf="loading" class="loader-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="table-container glass" *ngIf="!loading">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Citizen</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Officer</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let g of grievances">
+            <td>#{{ g.id }}</td>
+            <td class="td-title">{{ g.title }}</td>
+            <td>{{ g.citizenUsername }}</td>
+            <td>{{ g.category }}</td>
+            <td><span class="status" [ngClass]="g.status.toLowerCase()">{{ g.status }}</span></td>
+            <td><span class="priority" [ngClass]="g.priority?.toLowerCase() || 'none'">{{ g.priority || 'N/A' }}</span></td>
+            <td>{{ g.assignedOfficer || 'Unassigned' }}</td>
+            <td>
+              <button (click)="openAssignModal(g)" class="btn-manage">Manage</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Assign Modal -->
+  <div *ngIf="selectedGrievance" class="modal-backdrop">
+    <div class="glass modal">
+      <h3>Assign Resource for #{{ selectedGrievance.id }}</h3>
+      <p>{{ selectedGrievance.title }}</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Assign Officer</label>
+          <select [(ngModel)]="assignData.assignedOfficer">
+            <option value="">Select Officer</option>
+            <option *ngFor="let off of officers" [value]="off">{{ off }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Department</label>
+          <select [(ngModel)]="assignData.department">
+            <option value="">Select Department</option>
+            <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Priority</label>
+          <select [(ngModel)]="assignData.priority">
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+            <option value="CRITICAL">Critical</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" [(ngModel)]="assignData.deadline">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Remarks for Officer</label>
+          <textarea [(ngModel)]="assignData.remarks" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button (click)="closeModal()" class="btn-cancel">Cancel</button>
+        <button (click)="submitAssignment()" class="btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>

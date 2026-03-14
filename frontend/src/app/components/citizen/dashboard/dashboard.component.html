@@ -1,0 +1,76 @@
+<div class="dashboard-container">
+  <nav class="glass navbar">
+    <div class="logo">
+      <span class="praise">Civic</span><span class="hub">Pulse</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/citizen/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/citizen/submit">Submit Grievance</a>
+      <a routerLink="/citizen/my-grievances">My Grievances</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header class="welcome-section">
+      <h1>Welcome, <span class="gradient-text">{{ username }}</span></h1>
+      <p>Here's an overview of your civic contributions</p>
+    </header>
+
+    <div class="stats-grid">
+      <div class="glass stat-card">
+        <h3>Total Filed</h3>
+        <p class="stat-value">{{ totalGrievances }}</p>
+      </div>
+      <div class="glass stat-card">
+        <h3>Currently Pending</h3>
+        <p class="stat-value pending">{{ pendingGrievances }}</p>
+      </div>
+      <div class="glass stat-card">
+        <h3>Successfully Resolved</h3>
+        <p class="stat-value resolved">{{ resolvedGrievances }}</p>
+      </div>
+    </div>
+
+    <section class="recent-section">
+      <div class="section-header">
+        <h2>Recent Grievances</h2>
+        <a routerLink="/citizen/my-grievances" class="view-all">View All</a>
+      </div>
+
+      <div *ngIf="loading" class="loader-container">
+        <div class="spinner"></div>
+      </div>
+
+      <div *ngIf="!loading && recentGrievances.length === 0" class="no-data">
+        <p>You haven't filed any grievances yet. <a routerLink="/citizen/submit">Pulse one now!</a></p>
+      </div>
+
+      <div *ngIf="!loading && recentGrievances.length > 0" class="grievance-list">
+        <div *ngFor="let g of recentGrievances" class="glass grievance-item">
+          <div class="g-info">
+            <h4>{{ g.title }}</h4>
+            <span class="g-date">{{ g.submittedAt | date:'mediumDate' }}</span>
+          </div>
+          <div class="g-status" [ngClass]="g.status.toLowerCase()">
+            {{ g.status }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions-grid">
+        <button routerLink="/citizen/submit" class="glass action-btn">
+          <i class="icon-plus"></i>
+          <span>Submit New Grievance</span>
+        </button>
+        <button routerLink="/citizen/my-grievances" class="glass action-btn">
+          <i class="icon-list"></i>
+          <span>Track My Grievances</span>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

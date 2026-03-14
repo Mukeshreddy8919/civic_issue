@@ -1,0 +1,29 @@
+
+> Task :compileJava FAILED
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\UserRepository.java:9: error: cannot find symbol
+    List<User> findByRole(String role);
+    ^
+  symbol:   class List
+  location: interface UserRepository
+1 error
+
+[Incubating] Problems report is available at: file:///E:/Infosys%20Internship/civic_pulse_hubK7-AI-main/civic_pulse_hubK7-main/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\UserRepository.java:9: error: cannot find symbol
+      List<User> findByRole(String role);
+      ^
+    symbol:   class List
+    location: interface UserRepository
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+BUILD FAILED in 4s
+1 actionable task: 1 executed

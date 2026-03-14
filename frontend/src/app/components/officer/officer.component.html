@@ -1,0 +1,81 @@
+<div class="officer-container">
+  <nav class="glass navbar">
+    <div class="logo">
+      <span class="praise">Officer</span><span class="hub">Panel</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/officer" routerLinkActive="active">My Tasks</a>
+      <a routerLink="/officer/reports">Analytics</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header>
+      <h2>Pulse <span class="gradient-text">Resolution Center</span></h2>
+      <p>Manage your assigned grievances and provide resolutions</p>
+    </header>
+
+    <div *ngIf="loading" class="loader-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div *ngIf="!loading && grievances.length === 0" class="no-data">
+      <p>No grievances assigned to you at the moment.</p>
+    </div>
+
+    <div class="tasks-grid" *ngIf="!loading">
+      <div *ngFor="let g of grievances" class="glass card">
+        <div class="card-header">
+          <span class="priority" [ngClass]="g.priority?.toLowerCase()">{{ g.priority }}</span>
+          <span class="status" [ngClass]="g.status.toLowerCase()">{{ g.status }}</span>
+        </div>
+        
+        <h3>{{ g.title }}</h3>
+        <p class="description">{{ g.description }}</p>
+        
+        <div class="meta-info">
+          <span><i class="icon-calendar"></i> Deadline: {{ g.deadline | date:'mediumDate' }}</span>
+          <span><i class="icon-map"></i> {{ g.location }}</span>
+        </div>
+
+        <div class="card-actions">
+          <button *ngIf="g.status === 'IN_PROGRESS'" (click)="openResolveModal(g)" class="btn-resolve">Resolve Now</button>
+          <button *ngIf="g.status === 'PENDING'" (click)="updateStatus(g, 'IN_PROGRESS')" class="btn-work">Start Working</button>
+          <span *ngIf="g.status === 'RESOLVED' || g.status === 'CLOSED'" class="resolved-tag">Resolution Submitted</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Resolve Modal -->
+  <div *ngIf="selectedGrievance" class="modal-backdrop">
+    <div class="glass modal">
+      <h3>Submit Resolution for #{{ selectedGrievance.id }}</h3>
+      
+      <div class="form-group">
+        <label>Resolution Details</label>
+        <textarea [(ngModel)]="resolutionDetails" rows="4" placeholder="Describe how the issue was resolved..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Evidence of Resolution (Image)</label>
+        <div class="upload-zone" (click)="fileInput.click()">
+          <div *ngIf="!resolutionImageBase64" class="upload-placeholder">
+            <span>Upload after-fix image</span>
+          </div>
+          <img *ngIf="resolutionImageBase64" [src]="resolutionImageBase64" alt="Resolution Preview">
+          <input #fileInput type="file" (change)="onFileChange($event)" hidden accept="image/*">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button (click)="closeModal()" class="btn-cancel">Cancel</button>
+        <button (click)="submitResolution()" [disabled]="!resolutionDetails || submitting" class="btn-primary">
+          <span *ngIf="!submitting">Submit Resolution</span>
+          <span *ngIf="submitting" class="spinner small"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

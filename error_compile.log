@@ -1,0 +1,281 @@
+
+> Task :compileJava FAILED
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\UserRepository.java:4: error: package org.springframework.data.jpa.repository does not exist
+import org.springframework.data.jpa.repository.JpaRepository;
+                                              ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\UserRepository.java:8: error: cannot find symbol
+public interface UserRepository extends JpaRepository<User, Long> {
+                                        ^
+  symbol: class JpaRepository
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:6: error: cannot find symbol
+@Entity
+ ^
+  symbol: class Entity
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:7: error: cannot find symbol
+@Table(name = "users")
+ ^
+  symbol: class Table
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:3: error: package jakarta.persistence does not exist
+import jakarta.persistence.*;
+^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\GrievanceRepository.java:4: error: package org.springframework.data.jpa.repository does not exist
+import org.springframework.data.jpa.repository.JpaRepository;
+                                              ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\GrievanceRepository.java:7: error: cannot find symbol
+public interface GrievanceRepository extends JpaRepository<Grievance, Long> {
+                                             ^
+  symbol: class JpaRepository
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:5: error: package jakarta.persistence does not exist
+import jakarta.persistence.Column;
+                          ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:6: error: package jakarta.persistence does not exist
+import jakarta.persistence.Entity;
+                          ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:7: error: package jakarta.persistence does not exist
+import jakarta.persistence.GeneratedValue;
+                          ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:8: error: package jakarta.persistence does not exist
+import jakarta.persistence.GenerationType;
+                          ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:9: error: package jakarta.persistence does not exist
+import jakarta.persistence.Id;
+                          ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:10: error: package jakarta.persistence does not exist
+import jakarta.persistence.Table;
+                          ^
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:16: error: cannot find symbol
+@Entity
+ ^
+  symbol: class Entity
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:17: error: cannot find symbol
+@Table(name = "grievances")
+ ^
+  symbol: class Table
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:12: error: cannot find symbol
+    @Id
+     ^
+  symbol:   class Id
+  location: class User
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:13: error: cannot find symbol
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+     ^
+  symbol:   class GeneratedValue
+  location: class User
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:13: error: cannot find symbol
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+                               ^
+  symbol:   variable GenerationType
+  location: class User
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:16: error: cannot find symbol
+    @Column(unique = true, nullable = false)
+     ^
+  symbol:   class Column
+  location: class User
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:19: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class User
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:22: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class User
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:22: error: cannot find symbol
+    @Id
+     ^
+  symbol:   class Id
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:23: error: cannot find symbol
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+     ^
+  symbol:   class GeneratedValue
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:23: error: cannot find symbol
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+                               ^
+  symbol:   variable GenerationType
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:26: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:29: error: cannot find symbol
+    @Column(nullable = false, length = 1000)
+     ^
+  symbol:   class Column
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:32: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:35: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:40: error: cannot find symbol
+    @Column(length = 5000000) // ~5MB base64 image
+     ^
+  symbol:   class Column
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:43: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class Grievance
+E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:46: error: cannot find symbol
+    @Column(nullable = false)
+     ^
+  symbol:   class Column
+  location: class Grievance
+31 errors
+
+[Incubating] Problems report is available at: file:///E:/Infosys%20Internship/civic_pulse_hubK7-AI-main/civic_pulse_hubK7-main/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:12: error: cannot find symbol
+      @Id
+       ^
+    symbol:   class Id
+    location: class User
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:13: error: cannot find symbol
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+       ^
+    symbol:   class GeneratedValue
+    location: class User
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:13: error: cannot find symbol
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+                                 ^
+    symbol:   variable GenerationType
+    location: class User
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:16: error: cannot find symbol
+      @Column(unique = true, nullable = false)
+       ^
+    symbol:   class Column
+    location: class User
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:19: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class User
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:22: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class User
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:22: error: cannot find symbol
+      @Id
+       ^
+    symbol:   class Id
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:23: error: cannot find symbol
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+       ^
+    symbol:   class GeneratedValue
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:23: error: cannot find symbol
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+                                 ^
+    symbol:   variable GenerationType
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:26: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:29: error: cannot find symbol
+      @Column(nullable = false, length = 1000)
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:32: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:35: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:40: error: cannot find symbol
+      @Column(length = 5000000) // ~5MB base64 image
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:43: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:46: error: cannot find symbol
+      @Column(nullable = false)
+       ^
+    symbol:   class Column
+    location: class Grievance
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\UserRepository.java:8: error: cannot find symbol
+  public interface UserRepository extends JpaRepository<User, Long> {
+                                          ^
+    symbol: class JpaRepository
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:6: error: cannot find symbol
+  @Entity
+   ^
+    symbol: class Entity
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:7: error: cannot find symbol
+  @Table(name = "users")
+   ^
+    symbol: class Table
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\GrievanceRepository.java:7: error: cannot find symbol
+  public interface GrievanceRepository extends JpaRepository<Grievance, Long> {
+                                               ^
+    symbol: class JpaRepository
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:16: error: cannot find symbol
+  @Entity
+   ^
+    symbol: class Entity
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:17: error: cannot find symbol
+  @Table(name = "grievances")
+   ^
+    symbol: class Table
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\UserRepository.java:4: error: package org.springframework.data.jpa.repository does not exist
+  import org.springframework.data.jpa.repository.JpaRepository;
+                                                ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\User.java:3: error: package jakarta.persistence does not exist
+  import jakarta.persistence.*;
+  ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\repository\GrievanceRepository.java:4: error: package org.springframework.data.jpa.repository does not exist
+  import org.springframework.data.jpa.repository.JpaRepository;
+                                                ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:5: error: package jakarta.persistence does not exist
+  import jakarta.persistence.Column;
+                            ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:6: error: package jakarta.persistence does not exist
+  import jakarta.persistence.Entity;
+                            ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:7: error: package jakarta.persistence does not exist
+  import jakarta.persistence.GeneratedValue;
+                            ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:8: error: package jakarta.persistence does not exist
+  import jakarta.persistence.GenerationType;
+                            ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:9: error: package jakarta.persistence does not exist
+  import jakarta.persistence.Id;
+                            ^
+  E:\Infosys Internship\civic_pulse_hubK7-AI-main\civic_pulse_hubK7-main\src\main\java\com\civic\smartcity\model\Grievance.java:10: error: package jakarta.persistence does not exist
+  import jakarta.persistence.Table;
+                            ^
+  31 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+BUILD FAILED in 4s
+1 actionable task: 1 executed

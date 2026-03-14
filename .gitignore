@@ -1,0 +1,29 @@
+# Build and binary folders
+build/
+bin/
+.gradle/
+.settings/
+.classpath
+.project
+
+# Logs
+*.log
+build_errors.txt
+error_compile.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Frontend (handled by its own .gitignore but good to double-cover)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# IDE files
+.vscode/
+
+# Package files
+*.class
+*.jar
+*.war
