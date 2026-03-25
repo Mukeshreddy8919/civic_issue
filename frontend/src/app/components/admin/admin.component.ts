@@ -15,11 +15,21 @@ import { Grievance } from '../../models/grievance.model';
 })
 export class AdminComponent implements OnInit {
   grievances: Grievance[] = [];
+  filteredGrievances: Grievance[] = [];
   loading = true;
   selectedGrievance: Grievance | null = null;
   
-  // Mock officers for now (in real app, fetch from userService)
-  officers = ['Officer_Rahul', 'Officer_Priya', 'Officer_Amit', 'Officer_Sneha'];
+  stats = {
+    total: 0,
+    pending: 0,
+    resolved: 0,
+    inProgress: 0
+  };
+
+  filterStatus = 'ALL';
+  
+  // Officers loaded from backend
+  officers: string[] = [];
   departments = ['Public Works', 'Sanitation', 'Water Dept', 'Electricity board', 'Healthcare'];
   
   assignData = {
@@ -37,12 +47,26 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAllGrievances();
+    this.loadOfficers();
+  }
+
+  loadOfficers() {
+    this.grievanceService.getOfficers().subscribe({
+      next: (data) => {
+        this.officers = data;
+      },
+      error: (err) => {
+        console.warn('Could not load officers:', err);
+      }
+    });
   }
 
   loadAllGrievances() {
     this.grievanceService.getAll().subscribe({
       next: (data) => {
         this.grievances = data;
+        this.calculateStats();
+        this.applyFilter();
         this.loading = false;
       },
       error: (err) => {
@@ -89,5 +113,25 @@ export class AdminComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  calculateStats() {
+    this.stats.total = this.grievances.length;
+    this.stats.pending = this.grievances.filter(g => g.status === 'PENDING').length;
+    this.stats.resolved = this.grievances.filter(g => g.status === 'RESOLVED').length;
+    this.stats.inProgress = this.grievances.filter(g => g.status === 'IN_PROGRESS').length;
+  }
+
+  applyFilter() {
+    if (this.filterStatus === 'ALL') {
+      this.filteredGrievances = this.grievances;
+    } else {
+      this.filteredGrievances = this.grievances.filter(g => g.status === this.filterStatus);
+    }
+  }
+
+  onFilterChange(status: string) {
+    this.filterStatus = status;
+    this.applyFilter();
   }
 }

@@ -2,6 +2,7 @@ package com.civic.smartcity.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -96,6 +97,18 @@ public class GrievanceController {
             return ResponseEntity.ok(grievanceService.getById(id, extractToken(authHeader)));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // ── GET /api/grievances/admin/officers  (ADMIN only) ───────────────────────
+    @GetMapping("/admin/officers")
+    public ResponseEntity<?> getOfficers(
+            @RequestHeader("Authorization") String authHeader) {
+        try {
+            List<String> officers = grievanceService.getOfficerUsernames(extractToken(authHeader));
+            return ResponseEntity.ok(officers);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
     }
 

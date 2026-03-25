@@ -4,7 +4,9 @@ import com.civic.smartcity.dto.AdminAssignRequest;
 import com.civic.smartcity.dto.GrievanceRequest;
 import com.civic.smartcity.dto.GrievanceResponse;
 import com.civic.smartcity.model.Grievance;
+import com.civic.smartcity.model.User;
 import com.civic.smartcity.repository.GrievanceRepository;
+import com.civic.smartcity.repository.UserRepository;
 import com.civic.smartcity.security.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class GrievanceService {
 
     @Autowired
     private GrievanceRepository grievanceRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -68,6 +73,13 @@ public class GrievanceService {
             .stream().map(this::toResponse).collect(Collectors.toList());
     }
 
+    public List<String> getOfficerUsernames(String token) {
+        String role = jwtUtil.getRoleFromToken(token);
+        if (!"ADMIN".equals(role)) throw new IllegalArgumentException("Only admins can view officers.");
+        return userRepository.findByRole("OFFICER")
+            .stream().map(User::getUsername).collect(Collectors.toList());
+    }
+
     public List<GrievanceResponse> getByStatus(String status) {
         return grievanceRepository.findByStatusOrderBySubmittedAtDesc(status.toUpperCase())
             .stream().map(this::toResponse).collect(Collectors.toList());
@@ -92,7 +104,18 @@ public class GrievanceService {
             if (!VALID_PRIORITIES.contains(p)) throw new IllegalArgumentException("Invalid priority.");
             g.setPriority(p);
         }
-        if (request.getDeadline() != null) g.setDeadline(request.getDeadline());
+        if (request.getDeadline() != null && !request.getDeadline().isBlank()) {
+            try {
+                // Accept "YYYY-MM-DD" from HTML date input or full ISO datetime
+                String raw = request.getDeadline().trim();
+                java.time.LocalDateTime dt = raw.contains("T")
+                    ? java.time.LocalDateTime.parse(raw)
+                    : java.time.LocalDate.parse(raw).atStartOfDay();
+                g.setDeadline(dt);
+            } catch (Exception ex) {
+                throw new IllegalArgumentException("Invalid deadline format. Use YYYY-MM-DD.");
+            }
+        }
         if (request.getStatus()   != null) {
             String s = request.getStatus().toUpperCase();
             if (!VALID_STATUSES.contains(s)) throw new IllegalArgumentException("Invalid status.");

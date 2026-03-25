@@ -21,7 +21,56 @@
   cursor: pointer;
 }
 
-header { text-align: center; margin-bottom: 40px; }
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  padding: 20px;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card.pending .stat-value { color: #fdbb2d; }
+.stat-card.progress .stat-value { color: #22c1c3; }
+.stat-card.resolved .stat-value { color: #00ff00; }
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.select-filter {
+  padding: 8px 15px;
+  border-radius: 8px;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  outline: none;
+}
+
+.select-filter option {
+  background: #1a1a2e;
+  border: none;
+}
 
 .tasks-grid {
   display: grid;
@@ -80,26 +129,33 @@ header { text-align: center; margin-bottom: 40px; }
   gap: 10px;
 }
 
-.btn-resolve {
-  background: #00ff00;
-  color: #000;
-  border: none;
+.btn-resolve, .btn-work, .btn-view-card {
   padding: 10px;
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
   flex: 1;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.btn-resolve {
+  background: #00ff00;
+  color: #000;
+  border: none;
 }
 
 .btn-work {
   background: #22c1c3;
   color: #fff;
   border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  flex: 1;
+}
+
+.btn-view-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
 }
 
 .resolved-tag {

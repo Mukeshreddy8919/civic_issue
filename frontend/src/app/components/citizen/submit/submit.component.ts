@@ -15,6 +15,8 @@ export class SubmitComponent {
   submitForm: FormGroup;
   loading = false;
   imagePreview: string | null = null;
+  locating = false;
+  locationError: string | null = null;
   categories = [
     { value: 'WATER', label: 'Water Supply' },
     { value: 'STREET_LIGHT', label: 'Street Lights' },
@@ -66,5 +68,36 @@ export class SubmitComponent {
         }
       });
     }
+  }
+
+  detectLocation() {
+    if (!navigator.geolocation) {
+      this.locationError = 'Geolocation is not supported by your browser.';
+      return;
+    }
+    this.locating = true;
+    this.locationError = null;
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude.toFixed(6);
+        const lng = position.coords.longitude.toFixed(6);
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+          );
+          const data = await res.json();
+          const address = data.display_name || `${lat}, ${lng}`;
+          this.submitForm.patchValue({ location: address });
+        } catch {
+          this.submitForm.patchValue({ location: `${lat}, ${lng}` });
+        }
+        this.locating = false;
+      },
+      (error) => {
+        this.locationError = 'Unable to detect location. Please allow location access or enter manually.';
+        this.locating = false;
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   }
 }

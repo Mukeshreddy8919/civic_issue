@@ -33,7 +33,14 @@
 
           <div class="form-group half-width">
             <label>Location</label>
-            <input type="text" formControlName="location" placeholder="Area, Landmark or Street">
+            <div class="location-group">
+              <input type="text" formControlName="location" placeholder="Area, Landmark or Street">
+              <button type="button" class="btn-locate" (click)="detectLocation()" [disabled]="locating" title="Detect my location">
+                <span *ngIf="!locating">📍 Detect</span>
+                <span *ngIf="locating" class="spinner-sm"></span>
+              </button>
+            </div>
+            <small *ngIf="locationError" class="location-error">{{ locationError }}</small>
           </div>
 
           <div class="form-group full-width">
