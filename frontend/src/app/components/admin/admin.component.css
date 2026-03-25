@@ -76,17 +76,25 @@ td {
 .priority.medium { background: #fdbb2d; color: #000; }
 .priority.low { background: #22c1c3; color: #000; }
 
-.btn-manage {
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-manage, .btn-view {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.2);
   color: #fff;
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
-.btn-manage:hover {
+.btn-manage:hover, .btn-view:hover {
   background: #fdbb2d;
   color: #000;
 }

@@ -12,7 +12,8 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', loadComponent: () => import('./components/citizen/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'submit', loadComponent: () => import('./components/citizen/submit/submit.component').then(m => m.SubmitComponent) },
-      { path: 'my-grievances', loadComponent: () => import('./components/citizen/my-grievances/my-grievances.component').then(m => m.MyGrievancesComponent) }
+      { path: 'my-grievances', loadComponent: () => import('./components/citizen/my-grievances/my-grievances.component').then(m => m.MyGrievancesComponent) },
+      { path: 'grievance/:id', loadComponent: () => import('./components/citizen/detailed-view/detailed-view.component').then(m => m.DetailedViewComponent) }
     ]
   },
   { 

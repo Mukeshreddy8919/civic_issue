@@ -44,7 +44,10 @@
             <td><span class="priority" [ngClass]="g.priority?.toLowerCase() || 'none'">{{ g.priority || 'N/A' }}</span></td>
             <td>{{ g.assignedOfficer || 'Unassigned' }}</td>
             <td>
-              <button (click)="openAssignModal(g)" class="btn-manage">Manage</button>
+              <div class="action-btns">
+                <button (click)="openAssignModal(g)" class="btn-manage">Manage</button>
+                <a [routerLink]="['/citizen/grievance', g.id]" class="btn-view">View</a>
+              </div>
             </td>
           </tr>
         </tbody>

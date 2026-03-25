@@ -1,0 +1,106 @@
+<div class="details-container">
+  <nav class="glass navbar">
+    <div class="logo">
+      <span class="praise">Civic</span><span class="hub">Pulse</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/citizen/dashboard">Dashboard</a>
+      <a routerLink="/citizen/my-grievances">My Grievances</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <div *ngIf="loading" class="loader-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div *ngIf="!loading && grievance" class="glass detail-card">
+      <header class="g-header">
+        <div class="title-meta">
+          <span class="category-tag">{{ grievance.category }}</span>
+          <h1>{{ grievance.title }}</h1>
+          <p class="g-id">Case ID: #{{ grievance.id }}</p>
+        </div>
+        <div class="status-badge" [ngClass]="grievance.status.toLowerCase()">
+          {{ grievance.status }}
+        </div>
+      </header>
+
+      <!-- Status Stepper -->
+      <section class="stepper-section">
+        <h3>Status History</h3>
+        <div class="stepper">
+          <div *ngFor="let step of steps; let i = index" class="step" [class.active]="isStepCompleted(i)">
+            <div class="step-circle">{{ i + 1 }}</div>
+            <div class="step-label">{{ step.label }}</div>
+            <div *ngIf="i < steps.length - 1" class="step-connector"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid-content">
+        <div class="main-info">
+          <section class="desc-section">
+            <label>Description</label>
+            <p>{{ grievance.description }}</p>
+          </section>
+
+          <section class="meta-grid">
+            <div class="meta-item">
+              <label>Location</label>
+              <p>{{ grievance.location }}</p>
+            </div>
+            <div class="meta-item">
+              <label>Filed On</label>
+              <p>{{ grievance.submittedAt | date:'medium' }}</p>
+            </div>
+            <div class="meta-item" *ngIf="grievance.assignedOfficer">
+              <label>Assigned Officer</label>
+              <p>{{ grievance.assignedOfficer }}</p>
+            </div>
+            <div class="meta-item" *ngIf="grievance.deadline">
+              <label>Resolution Deadline</label>
+              <p>{{ grievance.deadline | date:'mediumDate' }}</p>
+            </div>
+          </section>
+
+          <!-- Evidence Image -->
+          <section class="image-section" *ngIf="grievance.imageBase64">
+            <label>Submitted Evidence</label>
+            <div class="img-wrapper glass">
+              <img [src]="grievance.imageBase64" alt="Evidence">
+            </div>
+          </section>
+        </div>
+
+        <div class="resolution-info" *ngIf="grievance.status === 'RESOLVED' || grievance.status === 'CLOSED'">
+          <div class="glass res-card">
+            <h3>Resolution Details</h3>
+            <p class="res-desc">{{ grievance.resolutionDetails }}</p>
+            
+            <div class="res-image" *ngIf="grievance.resolutionImageBase64">
+              <label>Completion Evidence</label>
+              <img [src]="grievance.resolutionImageBase64" alt="Resolution">
+            </div>
+
+            <div class="feedback-summary" *ngIf="grievance.status === 'CLOSED'">
+              <hr>
+              <div class="stars">
+                <span *ngFor="let s of [1,2,3,4,5]" class="star" [class.active]="(grievance.rating || 0) >= s">★</span>
+              </div>
+              <p class="citizen-feedback">"{{ grievance.feedback }}"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+        <button [routerLink]="['/citizen/my-grievances']" class="btn-back">Back to List</button>
+      </footer>
+    </div>
+
+    <div *ngIf="!loading && !grievance" class="no-data">
+      <p>Grievance not found.</p>
+    </div>
+  </main>
+</div>

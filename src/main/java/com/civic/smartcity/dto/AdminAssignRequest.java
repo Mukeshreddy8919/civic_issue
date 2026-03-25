@@ -1,14 +1,12 @@
 package com.civic.smartcity.dto;
 
-import java.time.LocalDateTime;
-
 public class AdminAssignRequest {
 
     private Long grievanceId;
     private String assignedOfficer;
     private String department;
     private String priority;
-    private LocalDateTime deadline;
+    private String deadline;   // received as "YYYY-MM-DD" from the date input
     private String status;
     private String remarks;
 
@@ -24,8 +22,8 @@ public class AdminAssignRequest {
     public String getPriority()               { return priority; }
     public void setPriority(String v)         { this.priority = v; }
 
-    public LocalDateTime getDeadline()        { return deadline; }
-    public void setDeadline(LocalDateTime v)  { this.deadline = v; }
+    public String getDeadline()               { return deadline; }
+    public void setDeadline(String v)         { this.deadline = v; }
 
     public String getStatus()                 { return status; }
     public void setStatus(String v)           { this.status = v; }

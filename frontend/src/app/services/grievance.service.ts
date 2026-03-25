@@ -38,6 +38,10 @@ export class GrievanceService {
     return this.http.post<Grievance>(`${this.apiUrl}/admin/assign`, assignData, { headers: this.getHeaders() });
   }
 
+  getOfficers(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/admin/officers`, { headers: this.getHeaders() });
+  }
+
   updateStatus(id: number, status: string, remarks?: string): Observable<Grievance> {
     return this.http.put<Grievance>(`${this.apiUrl}/${id}/status`, { status, remarks }, { headers: this.getHeaders() });
   }

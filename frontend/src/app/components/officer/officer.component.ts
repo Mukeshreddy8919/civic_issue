@@ -21,6 +21,16 @@ export class OfficerComponent implements OnInit {
   resolutionImageBase64: string | null = null;
   submitting = false;
 
+  stats = {
+    total: 0,
+    pending: 0,
+    resolved: 0,
+    inProgress: 0
+  };
+
+  filteredGrievances: Grievance[] = [];
+  filterStatus = 'ALL';
+
   constructor(
     private grievanceService: GrievanceService,
     private authService: AuthService
@@ -35,6 +45,8 @@ export class OfficerComponent implements OnInit {
       next: (data) => {
         const username = this.authService.currentUser()?.username;
         this.grievances = data.filter(g => g.assignedOfficer === username);
+        this.calculateStats();
+        this.applyFilter();
         this.loading = false;
       },
       error: (err) => {
@@ -92,5 +104,25 @@ export class OfficerComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  calculateStats() {
+    this.stats.total = this.grievances.length;
+    this.stats.pending = this.grievances.filter(g => g.status === 'PENDING').length;
+    this.stats.resolved = this.grievances.filter(g => g.status === 'RESOLVED').length;
+    this.stats.inProgress = this.grievances.filter(g => g.status === 'IN_PROGRESS').length;
+  }
+
+  applyFilter() {
+    if (this.filterStatus === 'ALL') {
+      this.filteredGrievances = this.grievances;
+    } else {
+      this.filteredGrievances = this.grievances.filter(g => g.status === this.filterStatus);
+    }
+  }
+
+  onFilterChange(status: string) {
+    this.filterStatus = status;
+    this.applyFilter();
   }
 }
