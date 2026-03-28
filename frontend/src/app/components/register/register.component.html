@@ -41,6 +41,35 @@
           </div>
         </div>
 
+        <!-- Officer Specific Fields -->
+        <ng-container *ngIf="registerForm.get('role')?.value === 'OFFICER'">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <div class="input-wrapper">
+              <input type="text" id="phone" formControlName="phone" placeholder="Enter phone number">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="department">Department</label>
+            <div class="input-wrapper">
+              <select id="department" formControlName="department">
+                <option value="">Select Department</option>
+                <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Work Location</label>
+            <button type="button" class="btn-secondary" (click)="detectLocation()" [disabled]="locating">
+              <span *ngIf="!locating">📍 Set Current Location</span>
+              <span *ngIf="locating">Capturing...</span>
+            </button>
+            <p *ngIf="locationSuccess" class="success-text">Location captured! ({{registerForm.get('latitude')?.value | number:'1.2-2'}}, {{registerForm.get('longitude')?.value | number:'1.2-2'}})</p>
+          </div>
+        </ng-container>
+
       <div *ngIf="error" class="error-msg">
         {{ error }}
       </div>

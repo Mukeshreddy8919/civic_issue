@@ -1,10 +1,12 @@
-<div class="reports-container">
+<div class="page-container reports-container">
   <nav class="glass navbar">
     <div class="logo">
       <span class="praise">Analytics</span><span class="hub">Hub</span>
     </div>
     <div class="nav-links">
-      <a routerLink="/admin">Back to Dashboard</a>
+      <a [routerLink]="currentUser?.role === 'ADMIN' ? '/admin' : '/officer'" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+      <a [routerLink]="currentUser?.role === 'ADMIN' ? '/admin/reports' : '/officer/reports'" routerLinkActive="active">Hub Overview</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
     </div>
   </nav>
 
@@ -36,6 +38,24 @@
         </canvas>
       </div>
 
+      <div class="glass chart-card">
+        <h3>SLA Performance (Avg Days)</h3>
+        <canvas baseChart
+          [data]="slaChartData"
+          [options]="slaChartOptions"
+          [type]="barChartType">
+        </canvas>
+      </div>
+
+      <div class="glass chart-card">
+        <h3>Zone Distribution</h3>
+        <canvas baseChart
+          [data]="zoneChartData"
+          [options]="pieChartOptions"
+          [type]="pieChartType">
+        </canvas>
+      </div>
+
       <div class="glass chart-card full-width">
         <h3>Grievances by Category</h3>
         <canvas baseChart
@@ -43,6 +63,17 @@
           [options]="barChartOptions"
           [type]="barChartType">
         </canvas>
+      </div>
+
+      <div class="glass red-zone-card full-width">
+        <h3>🚨 Red Zones (Critical Areas)</h3>
+        <div class="red-zones-list">
+          <div *ngFor="let zone of redZones" class="red-zone-item">
+            <span class="area-name">{{ zone.area }}</span>
+            <span class="area-count">{{ zone.count }} complaints</span>
+          </div>
+          <div *ngIf="redZones.length === 0" class="no-data-sm">No critical areas identified yet.</div>
+        </div>
       </div>
     </div>
   </main>

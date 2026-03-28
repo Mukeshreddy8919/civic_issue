@@ -7,4 +7,7 @@ public class RegisterRequest {
     private String role;
     private String email;
     private String phone;
+    private Double latitude;
+    private Double longitude;
+    private String department;
 }

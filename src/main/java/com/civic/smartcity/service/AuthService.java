@@ -42,6 +42,9 @@ public class AuthService {
         user.setRole(role);
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
+        user.setLatitude(request.getLatitude());
+        user.setLongitude(request.getLongitude());
+        user.setDepartment(request.getDepartment());
         userRepository.save(user);
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
         return new AuthResponse(token, user.getUsername(), user.getRole(), "Registration successful!");

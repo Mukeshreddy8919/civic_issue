@@ -22,7 +22,8 @@ export const routes: Routes = [
     data: { role: 'ADMIN' },
     children: [
       { path: '', loadComponent: () => import('./components/admin/admin.component').then(m => m.AdminComponent) },
-      { path: 'reports', loadComponent: () => import('./components/reports/reports.component').then(m => m.ReportsComponent) }
+      { path: 'reports', loadComponent: () => import('./components/reports/reports.component').then(m => m.ReportsComponent) },
+      { path: 'grievance/:id', loadComponent: () => import('./components/citizen/detailed-view/detailed-view.component').then(m => m.DetailedViewComponent) }
     ]
   },
   { 
@@ -31,7 +32,8 @@ export const routes: Routes = [
     data: { role: 'OFFICER' },
     children: [
       { path: '', loadComponent: () => import('./components/officer/officer.component').then(m => m.OfficerComponent) },
-      { path: 'reports', loadComponent: () => import('./components/reports/reports.component').then(m => m.ReportsComponent) }
+      { path: 'reports', loadComponent: () => import('./components/reports/reports.component').then(m => m.ReportsComponent) },
+      { path: 'grievance/:id', loadComponent: () => import('./components/citizen/detailed-view/detailed-view.component').then(m => m.DetailedViewComponent) }
     ]
   },
   { path: '**', redirectTo: 'login' }

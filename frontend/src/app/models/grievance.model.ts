@@ -18,6 +18,20 @@ export interface Grievance {
   resolutionDetails?: string;
   rating?: number;
   feedback?: string;
+  latitude?: number;
+  longitude?: number;
+  resolvedAt?: string;
+}
+
+export interface OfficerRecommendation {
+  username: string;
+  department: string;
+  latitude: number;
+  longitude: number;
+  distanceKm: number;
+  phone: string;
+  assignedCount: number;
+  resolvedCount: number;
 }
 
 export interface GrievanceRequest {
@@ -26,4 +40,6 @@ export interface GrievanceRequest {
   category: string;
   location: string;
   imageBase64?: string;
+  latitude?: number;
+  longitude?: number;
 }

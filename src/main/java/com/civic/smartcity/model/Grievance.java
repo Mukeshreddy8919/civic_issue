@@ -58,7 +58,10 @@ public class Grievance {
 
     private LocalDateTime deadline;
 
-    private String Department; // e.g., Public Works, Sanitation, etc.
+    private String department; // e.g., Public Works, Sanitation, etc.
+
+    private Double latitude;
+    private Double longitude;
 
     @Column(length = 5000000)
     private String resolutionImageBase64;
@@ -70,4 +73,6 @@ public class Grievance {
 
     @Column(length = 1000)
     private String feedback;
+
+    private LocalDateTime resolvedAt;
 }

@@ -1,4 +1,4 @@
-<div class="submit-container">
+<div class="page-container submit-container">
   <nav class="glass navbar">
     <div class="logo">
       <span class="praise">Civic</span><span class="hub">Pulse</span>
@@ -7,6 +7,7 @@
       <a routerLink="/citizen/dashboard">Dashboard</a>
       <a routerLink="/citizen/submit" routerLinkActive="active">Submit Grievance</a>
       <a routerLink="/citizen/my-grievances">My Grievances</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
     </div>
   </nav>
 
