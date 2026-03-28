@@ -1,11 +1,11 @@
-<div class="officer-container">
+<div class="page-container officer-container">
   <nav class="glass navbar">
     <div class="logo">
       <span class="praise">Officer</span><span class="hub">Panel</span>
     </div>
     <div class="nav-links">
-      <a routerLink="/officer" routerLinkActive="active">My Tasks</a>
-      <a routerLink="/officer/reports">Analytics</a>
+      <a routerLink="/officer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">My Tasks</a>
+      <a routerLink="/officer/reports" routerLinkActive="active">Analytics</a>
       <button (click)="logout()" class="btn-logout">Logout</button>
     </div>
   </nav>
@@ -71,7 +71,7 @@
         <div class="card-actions">
           <button *ngIf="g.status === 'IN_PROGRESS'" (click)="openResolveModal(g)" class="btn-resolve">Resolve Now</button>
           <button *ngIf="g.status === 'PENDING'" (click)="updateStatus(g, 'IN_PROGRESS')" class="btn-work">Start Working</button>
-          <a [routerLink]="['/citizen/grievance', g.id]" class="btn-view-card">View Details</a>
+          <a [routerLink]="['/officer/grievance', g.id]" class="btn-view-card">View Details</a>
         </div>
       </div>
     </div>

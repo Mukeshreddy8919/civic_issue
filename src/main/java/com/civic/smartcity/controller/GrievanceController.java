@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.civic.smartcity.dto.AdminAssignRequest;
 import com.civic.smartcity.dto.GrievanceRequest;
 import com.civic.smartcity.dto.GrievanceResponse;
+import com.civic.smartcity.dto.OfficerRecommendationDTO;
 import com.civic.smartcity.service.GrievanceService;
 
 @RestController
@@ -109,6 +110,20 @@ public class GrievanceController {
             return ResponseEntity.ok(officers);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // ── GET /api/grievances/admin/recommendations/{id} (ADMIN only) ─────────────
+    @GetMapping("/admin/recommendations/{id}")
+    public ResponseEntity<?> getRecommendations(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authHeader) {
+        try {
+            extractToken(authHeader); // Validate token
+            List<OfficerRecommendationDTO> recommendations = grievanceService.getRecommendedOfficers(id);
+            return ResponseEntity.ok(recommendations);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 

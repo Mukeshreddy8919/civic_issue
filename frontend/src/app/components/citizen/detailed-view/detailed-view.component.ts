@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GrievanceService } from '../../../services/grievance.service';
 import { Grievance } from '../../../models/grievance.model';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-detailed-view',
@@ -21,12 +22,22 @@ export class DetailedViewComponent implements OnInit {
     { label: 'Feedback Provided', status: 'CLOSED' }
   ];
 
+  userRole: string | null = null;
+  backRoute: string = '/citizen/my-grievances';
+
   constructor(
     private route: ActivatedRoute,
-    private grievanceService: GrievanceService
+    private grievanceService: GrievanceService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.userRole = this.authService.getRole();
+    if (this.userRole === 'ADMIN') this.backRoute = '/admin';
+    else if (this.userRole === 'OFFICER') this.backRoute = '/officer';
+    else this.backRoute = '/citizen/my-grievances';
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadGrievance(id);
@@ -34,7 +45,6 @@ export class DetailedViewComponent implements OnInit {
   }
 
   loadGrievance(id: number) {
-    // We can reuse getMyGrievances or getAll for now, or just get by id if implemented
     this.grievanceService.getAll().subscribe({
       next: (data) => {
         this.grievance = data.find(g => g.id === id) || null;
@@ -45,6 +55,10 @@ export class DetailedViewComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   getCurrentStepIndex(): number {

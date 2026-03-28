@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { GrievanceService } from '../../../services/grievance.service';
+import { AuthService } from '../../../services/auth.service';
 import { Grievance } from '../../../models/grievance.model';
 
 @Component({
@@ -20,7 +21,14 @@ export class MyGrievancesComponent implements OnInit {
   feedbackText = '';
   submittingFeedback = false;
 
-  constructor(private grievanceService: GrievanceService) {}
+  constructor(
+    private grievanceService: GrievanceService,
+    private authService: AuthService
+  ) {}
+
+  logout() {
+    this.authService.logout();
+  }
 
   ngOnInit(): void {
     this.loadGrievances();

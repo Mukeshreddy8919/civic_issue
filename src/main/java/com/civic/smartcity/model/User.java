@@ -24,4 +24,8 @@ public class User {
 
     private String email;
     private String phone;
+
+    private Double latitude;
+    private Double longitude;
+    private String department;
 }

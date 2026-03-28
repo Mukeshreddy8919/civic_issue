@@ -28,4 +28,7 @@ public class GrievanceResponse {
     private String resolutionDetails;
     private Integer rating;
     private String feedback;
+    private Double latitude;
+    private Double longitude;
+    private LocalDateTime resolvedAt;
 }

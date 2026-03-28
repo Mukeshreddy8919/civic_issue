@@ -3,6 +3,7 @@ package com.civic.smartcity.service;
 import com.civic.smartcity.dto.AdminAssignRequest;
 import com.civic.smartcity.dto.GrievanceRequest;
 import com.civic.smartcity.dto.GrievanceResponse;
+import com.civic.smartcity.dto.OfficerRecommendationDTO;
 import com.civic.smartcity.model.Grievance;
 import com.civic.smartcity.model.User;
 import com.civic.smartcity.repository.GrievanceRepository;
@@ -43,13 +44,26 @@ public class GrievanceService {
         g.setTitle(request.getTitle());
         g.setDescription(request.getDescription());
         g.setCategory(category);
+        g.setDepartment(mapCategoryToDepartment(category));
         g.setStatus("PENDING");
         g.setLocation(request.getLocation());
         g.setImageBase64(request.getImageBase64());
         g.setCitizenUsername(username);
+        g.setLatitude(request.getLatitude());
+        g.setLongitude(request.getLongitude());
         g.setSubmittedAt(LocalDateTime.now());
         grievanceRepository.save(g);
         return toResponse(g);
+    }
+
+    private String mapCategoryToDepartment(String category) {
+        return switch (category) {
+            case "WATER" -> "Water Dept";
+            case "STREET_LIGHT", "ELECTRICITY" -> "Electricity board";
+            case "ROAD", "PARK" -> "Public Works";
+            case "SANITATION", "DRAINAGE" -> "Sanitation";
+            default -> "Other";
+        };
     }
 
     public List<GrievanceResponse> getMyGrievances(String token) {
@@ -154,8 +168,57 @@ public class GrievanceService {
             g.getAssignedOfficer(), g.getRemarks(),
             g.getPriority(), g.getDeadline(), g.getDepartment(),
             g.getResolutionImageBase64(), g.getResolutionDetails(),
-            g.getRating(), g.getFeedback()
+            g.getRating(), g.getFeedback(),
+            g.getLatitude(), g.getLongitude(),
+            g.getResolvedAt()
         );
+    }
+
+    public List<OfficerRecommendationDTO> getRecommendedOfficers(Long grievanceId) {
+        Grievance g = grievanceRepository.findById(grievanceId)
+            .orElseThrow(() -> new IllegalArgumentException("Grievance not found."));
+        
+        String dept = g.getDepartment();
+        if (dept == null) throw new IllegalArgumentException("Grievance has no department assigned.");
+
+        List<User> officers = userRepository.findByRoleAndDepartment("OFFICER", dept);
+        
+        return officers.stream()
+            .map(off -> {
+                Double distance = null;
+                if (g.getLatitude() != null && g.getLongitude() != null && 
+                    off.getLatitude() != null && off.getLongitude() != null) {
+                    distance = calculateDistance(g.getLatitude(), g.getLongitude(), off.getLatitude(), off.getLongitude());
+                }
+                
+                long assigned = grievanceRepository.countByAssignedOfficer(off.getUsername());
+                long resolved = grievanceRepository.countByAssignedOfficerAndStatus(off.getUsername(), "RESOLVED");
+                long closed = grievanceRepository.countByAssignedOfficerAndStatus(off.getUsername(), "CLOSED");
+
+                return new OfficerRecommendationDTO(
+                    off.getUsername(), off.getDepartment(), 
+                    off.getLatitude(), off.getLongitude(), 
+                    distance, off.getPhone(),
+                    assigned, (resolved + closed)
+                );
+            })
+            .sorted((o1, o2) -> {
+                if (o1.getDistanceKm() == null) return 1;
+                if (o2.getDistanceKm() == null) return -1;
+                return o1.getDistanceKm().compareTo(o2.getDistanceKm());
+            })
+            .collect(Collectors.toList());
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Radius of the earth in km
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
     }
 
     public GrievanceResponse resolveGrievance(Long id, String details, String imageBase64, String token) {
@@ -173,6 +236,7 @@ public class GrievanceService {
         g.setResolutionDetails(details);
         g.setResolutionImageBase64(imageBase64);
         g.setUpdatedAt(LocalDateTime.now());
+        g.setResolvedAt(LocalDateTime.now());
         grievanceRepository.save(g);
         return toResponse(g);
     }
@@ -195,6 +259,7 @@ public class GrievanceService {
         g.setFeedback(feedback);
         g.setStatus("CLOSED"); // Auto-close after feedback
         g.setUpdatedAt(LocalDateTime.now());
+        if (g.getResolvedAt() == null) g.setResolvedAt(LocalDateTime.now());
         grievanceRepository.save(g);
         return toResponse(g);
     }

@@ -1,11 +1,11 @@
-<div class="admin-container">
+<div class="page-container admin-container">
   <nav class="glass navbar">
     <div class="logo">
       <span class="praise">Admin</span><span class="hub">Console</span>
     </div>
     <div class="nav-links">
-      <a routerLink="/admin" routerLinkActive="active">Manage</a>
-      <a routerLink="/admin/reports">Analytics</a>
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/admin/reports" routerLinkActive="active">Analytics</a>
       <button (click)="logout()" class="btn-logout">Logout</button>
     </div>
   </nav>
@@ -46,7 +46,7 @@
             <td>
               <div class="action-btns">
                 <button (click)="openAssignModal(g)" class="btn-manage">Manage</button>
-                <a [routerLink]="['/citizen/grievance', g.id]" class="btn-view">View</a>
+                <a [routerLink]="['/admin/grievance', g.id]" class="btn-view">View</a>
               </div>
             </td>
           </tr>
@@ -96,6 +96,32 @@
         <div class="form-group full-width">
           <label>Remarks for Officer</label>
           <textarea [(ngModel)]="assignData.remarks" rows="3"></textarea>
+        </div>
+
+        <div class="form-group full-width proximity-section">
+          <label>Proximity Recommendations (Nearest First)</label>
+          <div *ngIf="loadingRecommendations" class="loader-sm">Calculating distances...</div>
+          <div *ngIf="!loadingRecommendations && recommendations.length === 0" class="no-data-sm">
+            No matching officers found for this department.
+          </div>
+          <div class="recommendations-list" *ngIf="!loadingRecommendations && recommendations.length > 0">
+            <div *ngFor="let off of recommendations" class="rec-card" 
+                 [class.selected]="assignData.assignedOfficer === off.username"
+                 (click)="selectRecommendedOfficer(off)">
+              <div class="rec-info">
+                <strong>{{ off.username }}</strong>
+                <span class="rec-dist" *ngIf="off.distanceKm !== null">{{ off.distanceKm.toFixed(2) }} km away</span>
+                <span class="rec-dist" *ngIf="off.distanceKm === null">Location unknown</span>
+              </div>
+              <div class="rec-meta">
+                <span>{{ off.phone }}</span>
+                <div class="workload">
+                  <span class="badge assigned">Assigned: {{ off.assignedCount }}</span>
+                  <span class="badge solved">Solved: {{ off.resolvedCount }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { GrievanceService } from '../../services/grievance.service';
 import { AuthService } from '../../services/auth.service';
-import { Grievance } from '../../models/grievance.model';
+import { Grievance, OfficerRecommendation } from '../../models/grievance.model';
 
 @Component({
   selector: 'app-admin',
@@ -18,6 +18,8 @@ export class AdminComponent implements OnInit {
   filteredGrievances: Grievance[] = [];
   loading = true;
   selectedGrievance: Grievance | null = null;
+  recommendations: OfficerRecommendation[] = [];
+  loadingRecommendations = false;
   
   stats = {
     total: 0,
@@ -85,6 +87,27 @@ export class AdminComponent implements OnInit {
       deadline: g.deadline ? g.deadline.split('T')[0] : '',
       remarks: g.remarks || ''
     };
+    this.loadRecommendations(g.id);
+  }
+
+  loadRecommendations(id: number) {
+    this.loadingRecommendations = true;
+    this.recommendations = [];
+    this.grievanceService.getRecommendations(id).subscribe({
+      next: (data) => {
+        this.recommendations = data;
+        this.loadingRecommendations = false;
+      },
+      error: (err) => {
+        console.error('Failed to load recommendations', err);
+        this.loadingRecommendations = false;
+      }
+    });
+  }
+
+  selectRecommendedOfficer(off: OfficerRecommendation) {
+    this.assignData.assignedOfficer = off.username;
+    this.assignData.department = off.department;
   }
 
   closeModal() {

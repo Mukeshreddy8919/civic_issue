@@ -1,11 +1,18 @@
-<div class="details-container">
+<div class="page-container details-container">
   <nav class="glass navbar">
     <div class="logo">
-      <span class="praise">Civic</span><span class="hub">Pulse</span>
+      <span class="praise" *ngIf="userRole === 'ADMIN'">Admin</span>
+      <span class="praise" *ngIf="userRole === 'OFFICER'">Officer</span>
+      <span class="praise" *ngIf="userRole === 'CITIZEN'">Civic</span>
+      <span class="hub" *ngIf="userRole === 'ADMIN'">Console</span>
+      <span class="hub" *ngIf="userRole === 'OFFICER'">Panel</span>
+      <span class="hub" *ngIf="userRole === 'CITIZEN'">Pulse</span>
     </div>
     <div class="nav-links">
-      <a routerLink="/citizen/dashboard">Dashboard</a>
-      <a routerLink="/citizen/my-grievances">My Grievances</a>
+      <a [routerLink]="backRoute" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/citizen/submit" *ngIf="userRole === 'CITIZEN'" routerLinkActive="active">Submit Grievance</a>
+      <a routerLink="/citizen/my-grievances" *ngIf="userRole === 'CITIZEN'" routerLinkActive="active">My Grievances</a>
+      <button (click)="logout()" class="btn-logout">Logout</button>
     </div>
   </nav>
 
@@ -95,7 +102,7 @@
       </div>
 
       <footer class="card-footer">
-        <button [routerLink]="['/citizen/my-grievances']" class="btn-back">Back to List</button>
+        <button [routerLink]="backRoute" class="btn-back">Back to List</button>
       </footer>
     </div>
 

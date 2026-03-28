@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { GrievanceService } from '../../../services/grievance.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-submit',
@@ -31,15 +32,22 @@ export class SubmitComponent {
   constructor(
     private fb: FormBuilder,
     private grievanceService: GrievanceService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.submitForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
       category: ['OTHER', Validators.required],
       location: ['', Validators.required],
-      imageBase64: [null]
+      imageBase64: [null],
+      latitude: [null],
+      longitude: [null]
     });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   onFileChange(event: any) {
@@ -87,9 +95,17 @@ export class SubmitComponent {
           );
           const data = await res.json();
           const address = data.display_name || `${lat}, ${lng}`;
-          this.submitForm.patchValue({ location: address });
+          this.submitForm.patchValue({ 
+            location: address,
+            latitude: parseFloat(lat),
+            longitude: parseFloat(lng)
+          });
         } catch {
-          this.submitForm.patchValue({ location: `${lat}, ${lng}` });
+          this.submitForm.patchValue({ 
+            location: `${lat}, ${lng}`,
+            latitude: parseFloat(lat),
+            longitude: parseFloat(lng)
+          });
         }
         this.locating = false;
       },

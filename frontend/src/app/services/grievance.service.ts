@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Grievance, GrievanceRequest } from '../models/grievance.model';
+import { Grievance, GrievanceRequest, OfficerRecommendation } from '../models/grievance.model';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -40,6 +40,10 @@ export class GrievanceService {
 
   getOfficers(): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/admin/officers`, { headers: this.getHeaders() });
+  }
+
+  getRecommendations(id: number): Observable<OfficerRecommendation[]> {
+    return this.http.get<OfficerRecommendation[]>(`${this.apiUrl}/admin/recommendations/${id}`, { headers: this.getHeaders() });
   }
 
   updateStatus(id: number, status: string, remarks?: string): Observable<Grievance> {

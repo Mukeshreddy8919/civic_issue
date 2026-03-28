@@ -15,6 +15,9 @@ export class RegisterComponent {
   registerForm: FormGroup;
   error: string | null = null;
   loading = false;
+  locating = false;
+  locationSuccess = false;
+  departments = ['Public Works', 'Sanitation', 'Water Dept', 'Electricity board', 'Healthcare'];
 
   constructor(
     private fb: FormBuilder,
@@ -25,8 +28,34 @@ export class RegisterComponent {
       username: ['', [Validators.required, Validators.minLength(4)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [Validators.required, Validators.email]],
-      role: ['CITIZEN', Validators.required]
+      role: ['CITIZEN', Validators.required],
+      phone: [''],
+      department: [''],
+      latitude: [null],
+      longitude: [null]
     });
+  }
+
+  detectLocation() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    this.locating = true;
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.registerForm.patchValue({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+        this.locating = false;
+        this.locationSuccess = true;
+      },
+      (error) => {
+        alert('Unable to capture location. Please try again.');
+        this.locating = false;
+      }
+    );
   }
 
   onSubmit() {

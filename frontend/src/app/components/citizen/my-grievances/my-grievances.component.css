@@ -4,15 +4,7 @@
   margin: 0 auto;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  margin-bottom: 40px;
-}
-
-.nav-links { display: flex; gap: 20px; }
+.nav-links a { color: #fff; text-decoration: none; }
 .nav-links a { color: #fff; text-decoration: none; }
 .nav-links a.active { color: #fdbb2d; }
 

@@ -9,4 +9,6 @@ public class GrievanceRequest {
     private String category;
     private String location;
     private String imageBase64;
+    private Double latitude;
+    private Double longitude;
 }
